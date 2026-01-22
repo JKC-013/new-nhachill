@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Hexagon, X, ChevronRight, Mail, Phone, Linkedin, Facebook, Youtube, ChevronDown } from 'lucide-react';
+import { Hexagon, X, ChevronRight, Mail, Phone, Linkedin, Facebook, Youtube, ChevronDown, Menu } from 'lucide-react';
 import { useDemo, ROLES } from '../context/DemoContext';
 import AuthModal from '../components/AuthModal';
 
@@ -60,6 +60,7 @@ const PublicLayout = () => {
     const location = useLocation();
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const handleLoginSuccess = (roleId) => {
         login(roleId);
@@ -164,6 +165,15 @@ const PublicLayout = () => {
                         ))}
                     </nav>
 
+                    {/* Mobile Menu Button */}
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="lg:hidden p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                        aria-label="Toggle menu"
+                    >
+                        {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                    </button>
+
                     <div className="flex items-center space-x-4">
                         {user ? (
                             <div className="flex items-center gap-3">
@@ -188,6 +198,77 @@ const PublicLayout = () => {
                     </div>
                 </div>
             </header>
+
+            {/* Mobile Menu Drawer */}
+            <div className={`lg:hidden fixed inset-0 z-40 transition-all duration-300 ${mobileMenuOpen ? 'visible' : 'invisible'}`}>
+                {/* Backdrop */}
+                <div
+                    className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                ></div>
+
+                {/* Drawer */}
+                <div className={`absolute top-0 right-0 h-full w-[80%] max-w-sm bg-[#0F0F13] border-l border-white/10 shadow-2xl transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                    <div className="p-6 space-y-6 overflow-y-auto h-full">
+                        {/* Header */}
+                        <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                            <div className="flex items-center gap-2">
+                                <Hexagon className="text-accent fill-accent/20" size={24} strokeWidth={1.5} />
+                                <span className="font-display font-medium text-lg">NHACHILL</span>
+                            </div>
+                            <button
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        {/* Navigation */}
+                        <nav className="space-y-2">
+                            {NAV_ITEMS.map((item) => (
+                                <div key={item.label} className="space-y-1">
+                                    <Link
+                                        to={item.to}
+                                        onClick={() => {
+                                            handleLinkClick(item.to);
+                                            setMobileMenuOpen(false);
+                                        }}
+                                        className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${location.pathname === item.to || (item.subItems && item.subItems.some(sub => location.pathname === sub.to))
+                                                ? 'text-white bg-white/10'
+                                                : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                            }`}
+                                    >
+                                        {item.label}
+                                    </Link>
+
+                                    {/* Sub-items */}
+                                    {(item.subItems || item.sections) && (
+                                        <div className="pl-4 space-y-1">
+                                            {(item.subItems || (item.label === 'About Us' ? item.sections : [])).map((sub) => (
+                                                <button
+                                                    key={sub.label}
+                                                    onClick={() => {
+                                                        if (item.sections) {
+                                                            handleAboutScroll(sub.id);
+                                                        } else {
+                                                            navigate(sub.to);
+                                                        }
+                                                        setMobileMenuOpen(false);
+                                                    }}
+                                                    className="w-full text-left px-4 py-2 rounded-lg text-xs text-gray-500 hover:text-white hover:bg-white/5 transition-all"
+                                                >
+                                                    {sub.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </nav>
+                    </div>
+                </div>
+            </div>
 
             <main className="pt-32 pb-20">
                 <Outlet />

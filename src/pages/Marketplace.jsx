@@ -116,9 +116,9 @@ const Marketplace = ({ categoryFilter, initialTab: propInitialTab, title, subtit
                     </p>
                 </motion.div>
 
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto w-full">
                     {/* Tabs */}
-                    <div className="flex p-1 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shrink-0">
+                    <div className="flex p-1 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shrink-0 overflow-x-auto max-w-full no-scrollbar">
                         <TabButton
                             active={activeTab === 'designs'}
                             onClick={() => setActiveTab('designs')}
@@ -267,7 +267,7 @@ const Marketplace = ({ categoryFilter, initialTab: propInitialTab, title, subtit
 const TabButton = ({ active, onClick, icon, label }) => (
     <button
         onClick={onClick}
-        className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-all ${active
+        className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${active
             ? 'bg-secondary text-black shadow-lg shadow-secondary/20'
             : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}

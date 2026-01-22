@@ -51,7 +51,7 @@ const ProductDetailDesign = () => {
     }, [id]);
 
     return (
-        <div className="px-6 max-w-7xl mx-auto py-10 space-y-12 pb-32">
+        <div className="px-4 md:px-6 max-w-7xl mx-auto py-10 space-y-12 pb-32">
             {/* Navigation Header */}
             <div className="flex items-center justify-between">
                 <motion.button

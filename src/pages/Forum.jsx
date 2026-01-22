@@ -194,6 +194,18 @@ const Forum = ({ initialTab: propInitialTab }) => {
                             </div>
                         </div>
 
+                        {/* Mobile Topic Selector */}
+                        <div className="lg:hidden overflow-x-auto pb-2 -mx-4 px-4 flex gap-2 no-scrollbar">
+                            <button className="whitespace-nowrap px-4 py-2 bg-primary text-black font-bold rounded-xl text-sm flex items-center gap-2">
+                                <PlusCircle size={16} /> New
+                            </button>
+                            {['All Discussions', 'General', 'Design Help', 'Showcase', 'Jobs', 'Off-Topic'].map((topic, i) => (
+                                <button key={topic} className={`whitespace-nowrap px-4 py-2 rounded-xl text-sm transition-colors border border-white/5 ${i === 0 ? 'bg-white/10 text-white' : 'bg-[#0F0F13] text-gray-400'}`}>
+                                    {topic}
+                                </button>
+                            ))}
+                        </div>
+
                         {/* Feed */}
                         <div className="lg:col-span-3 space-y-4">
                             {MOCK_THREADS.map(thread => (
